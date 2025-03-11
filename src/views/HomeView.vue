@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue';
 
-console.log('oh my fucking god');
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+   <h1>Welcome to fucking job goblin</h1>
   </main>
 </template>
