@@ -1,7 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  msg: string
-}>()
+  rgdfg;
+  msg: string;
+}>();
+console.log('what the fuck is happenihg');
 </script>
 
 <template>
