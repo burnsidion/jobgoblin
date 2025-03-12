@@ -2,15 +2,15 @@
   <div class="w-full max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-lg">
     <h2 class="text-white text-center text-2xl font-semibold mb-4">Log in to your account</h2>
 
-    <form @submit.prevent="handleSubmit(onSubmit)" class="space-y-4">
+    <form @submit.prevent="submitForm" class="space-y-4">
       <!-- Email Field  -->
       <FormField name="email">
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
-            <Input v-model="email.value.value" type="email" placeholder="you@example.com" />
+            <Input v-model="email" type="email" placeholder="you@example.com" />
           </FormControl>
-          <FormMessage v-if="email.errorMessage">{{ email.errorMessage }}</FormMessage>
+          <FormMessage v-if="errors.email">{{ errors.email }}</FormMessage>
         </FormItem>
       </FormField>
 
@@ -19,9 +19,9 @@
         <FormItem>
           <FormLabel>Password</FormLabel>
           <FormControl>
-            <Input v-model="password.value.value" type="password" placeholder="••••••" />
+            <Input v-model="password" type="password" placeholder="••••••" />
           </FormControl>
-          <FormMessage v-if="password.errorMessage">{{ password.errorMessage }}</FormMessage>
+          <FormMessage v-if="errors.password">{{ errors.password }}</FormMessage>
         </FormItem>
       </FormField>
 
@@ -34,11 +34,15 @@
 </template>
 
 <script setup lang="ts">
-import { useForm, useField } from 'vee-validate';
+import { ref } from 'vue';
+import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
+import { useAuthStore } from '@/stores/authStore';
 
 import {
   FormControl,
@@ -48,10 +52,8 @@ import {
   FormMessage
 } from '@/components/ui/form';
 
-type LoginFormValues = {
-  email: string;
-  password: string;
-};
+const isLoading = ref(false);
+const authStore = useAuthStore();
 
 const loginSchema = toTypedSchema(
   z.object({
@@ -60,16 +62,28 @@ const loginSchema = toTypedSchema(
   })
 );
 
-const { handleSubmit } = useForm<LoginFormValues>({
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+const { handleSubmit, defineField, errors } = useForm({
   validationSchema: loginSchema,
 });
 
-const email = useField<string>('email');
-const password = useField<string>('password');
+const [email] = defineField('email');
+const [password] = defineField('password');
 
-const onSubmit = (values: LoginFormValues) => {
-  console.log("Form submitted", values);
+const onSubmit = async (values: LoginFormValues) => {
+
+  isLoading.value = true;
+  try {
+    await authStore.login(values.email, values.password);
+  } catch (error) {
+    console.error("Login error", error.message);
+  } finally {
+    isLoading.value = false;
+  }
 };
+
+const submitForm = handleSubmit(onSubmit);
 </script>
 
 <style scoped></style>
