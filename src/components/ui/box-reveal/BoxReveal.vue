@@ -1,16 +1,25 @@
 <template>
   <div :class="cn('relative', $props.class)">
-    <Motion :initial="initialMainVariants" :while-in-view="visibleMainVariants" :transition="{
-  duration: props.duration,
-  delay: props.delay * 2,
-}">
+    <Motion
+      :initial="initialMainVariants"
+      :while-in-view="visibleMainVariants"
+      :transition="{
+        duration: props.duration,
+        delay: props.delay * 2,
+      }"
+    >
       <slot />
     </Motion>
-    <Motion class="box-background absolute inset-0 z-20" :initial="initialSlideVariants" :while-in-view="visibleSlideVariants" :transition="{
-  duration: props.duration,
-  ease: 'easeIn',
-  delay: props.delay,
-}"></Motion>
+    <Motion
+      class="box-background absolute inset-0 z-20"
+      :initial="initialSlideVariants"
+      :while-in-view="visibleSlideVariants"
+      :transition="{
+        duration: props.duration,
+        ease: 'easeIn',
+        delay: props.delay,
+      }"
+    ></Motion>
   </div>
 </template>
 
