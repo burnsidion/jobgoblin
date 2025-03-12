@@ -1,9 +1,10 @@
 <template>
   <div class="relative flex justify-center items-center w-full h-screen">
-    <!-- Content should be centered above the canvas -->
     <div class="relative z-10 flex flex-col items-center text-center max-w-lg p-8">
       <BoxReveal color="linear-gradient(to right, #F8FAFC, #E5E7EB)">
-        <p class="text-[3.5rem] font-semibold">Welcome To JobGoblin<span class="text-white">.</span></p>
+        <p class="text-[3.5rem] font-semibold">
+          Welcome To JobGoblin<span class="text-white">.</span>
+        </p>
       </BoxReveal>
 
       <BoxReveal color="linear-gradient(to right, #E5E7EB, #9CA3AF)" :duration="1">
@@ -29,12 +30,29 @@
 
       <!-- Buttons -->
       <div class="flex gap-3 justify-center py-3">
-        <Button variant="ghost" class="text-lg border border-transparent hover:border-white"> Log In </Button>
-        <Button variant="ghost" class="text-lg border border-transparent hover:border-white"> Sign Up </Button>
+        <Button variant="ghost" class="text-lg border border-transparent hover:border-white">
+          Log In
+        </Button>
+        <Button @click="toggleForm" variant="ghost" class="text-lg border border-transparent hover:border-white">
+          Sign Up
+        </Button>
       </div>
     </div>
 
-    <!-- Background should be behind everything -->
+    <!-- Modal for Sign-Up Form -->
+    <Transition enter-active-class="transition-transform duration-300 ease-in-out"
+              enter-from-class="translate-x-full opacity-0"
+              enter-to-class="translate-x-0 opacity-100"
+              leave-active-class="transition-transform duration-300 ease-in-out"
+              leave-from-class="translate-x-0 opacity-100"
+              leave-to-class="translate-x-full opacity-0">
+      <div v-if="showForm" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2">
+        <div class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
+          <button @click="toggleForm" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+          <SignUpForm />
+        </div>
+      </div>
+    </Transition>
     <ParticlesBg class="absolute inset-0 -z-10" :quantity="100" :ease="100" :color="isDark ? '#FFF' : '#000'"
       :staticity="10" refresh />
   </div>
@@ -44,12 +62,20 @@
 import ParticlesBg from '@/components/ui/particles-bg/ParticlesBg.vue';
 import BoxReveal from '@/components/ui/box-reveal/BoxReveal.vue';
 
-import { computed } from "vue";
-import { useColorMode } from "@vueuse/core";
+import { computed, ref } from 'vue';
+import { useColorMode } from '@vueuse/core';
 import { Button } from '@/components/ui/button';
 
-const colorMode = useColorMode();
-colorMode.value = "dark";
+import SignUpForm from '@/components/SignUpForm.vue';
 
-const isDark = computed(() => colorMode.value === "dark");
+const showForm = ref(false);
+
+const colorMode = useColorMode();
+colorMode.value = 'dark';
+
+const isDark = computed(() => colorMode.value === 'dark');
+
+const toggleForm = () => {
+  showForm.value = !showForm.value;
+};
 </script>
