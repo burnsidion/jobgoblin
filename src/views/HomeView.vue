@@ -30,7 +30,7 @@
 
       <!-- Buttons -->
       <div class="flex gap-3 justify-center py-3">
-        <Button variant="ghost" class="text-lg border border-transparent hover:border-white">
+        <Button @click="toggleLoginForm" variant="ghost" class="text-lg border border-transparent hover:border-white">
           Log In
         </Button>
         <Button @click="toggleForm" variant="ghost" class="text-lg border border-transparent hover:border-white">
@@ -41,15 +41,28 @@
 
     <!-- Modal for Sign-Up Form -->
     <Transition enter-active-class="transition-transform duration-300 ease-in-out"
-              enter-from-class="translate-x-full opacity-0"
-              enter-to-class="translate-x-0 opacity-100"
-              leave-active-class="transition-transform duration-300 ease-in-out"
-              leave-from-class="translate-x-0 opacity-100"
-              leave-to-class="translate-x-full opacity-0">
+      enter-from-class="translate-x-full opacity-0" enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transition-transform duration-300 ease-in-out" leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0">
       <div v-if="showForm" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2">
-        <div class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
+        <div ref="signupModal"
+          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
           <button @click="toggleForm" class="absolute top-2 right-2 text-white text-xl">&times;</button>
-          <SignUpForm />
+          <SignUpForm @switch-to-login="handleSwitchToLogin" />
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Log In Modal -->
+    <Transition enter-active-class="transition-transform duration-300 ease-in-out"
+      enter-from-class="-translate-x-full opacity-0" enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transition-transform duration-300 ease-in-out" leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="-translate-x-full opacity-0">
+      <div v-if="showLoginForm" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2">
+        <div ref="loginModal"
+          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
+          <button @click="toggleLoginForm" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+          <LogInForm />
         </div>
       </div>
     </Transition>
@@ -63,12 +76,17 @@ import ParticlesBg from '@/components/ui/particles-bg/ParticlesBg.vue';
 import BoxReveal from '@/components/ui/box-reveal/BoxReveal.vue';
 
 import { computed, ref } from 'vue';
-import { useColorMode } from '@vueuse/core';
+import { useColorMode, onClickOutside } from '@vueuse/core';
 import { Button } from '@/components/ui/button';
 
 import SignUpForm from '@/components/SignUpForm.vue';
+import LogInForm from '@/components/LogInForm.vue';
 
 const showForm = ref(false);
+const showLoginForm = ref(false);
+
+const signupModal = ref<HTMLElement | null>(null);
+const loginModal = ref<HTMLElement | null>(null);
 
 const colorMode = useColorMode();
 colorMode.value = 'dark';
@@ -77,5 +95,24 @@ const isDark = computed(() => colorMode.value === 'dark');
 
 const toggleForm = () => {
   showForm.value = !showForm.value;
+  if (showForm.value) showLoginForm.value = false;
 };
+
+const toggleLoginForm = () => {
+  showLoginForm.value = !showLoginForm.value;
+  if (showLoginForm.value) showForm.value = false;
+};
+
+const handleSwitchToLogin = () => {
+  showForm.value = false;
+  showLoginForm.value = true;
+};
+
+onClickOutside(loginModal, () => {
+  showLoginForm.value = false;
+});
+
+onClickOutside(signupModal, () => {
+  showForm.value = false;
+});
 </script>

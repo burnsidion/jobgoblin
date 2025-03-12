@@ -41,9 +41,12 @@
     </form>
 
     <!-- Have an Account? -->
+    <!-- SignUpForm.vue -->
     <p class="text-sm text-gray-400 text-center mt-4">
       Already have an account?
-      <button @click="switchToLogin" class="text-blue-400 hover:underline">Log In</button>
+      <button @click="$emit('switch-to-login')" class="text-blue-400 hover:underline">
+        Log In
+      </button>
     </p>
   </div>
 </template>
@@ -53,6 +56,8 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from './ui/input';
+
+defineEmits(['switch-to-login']);
 
 import {
   FormControl,
