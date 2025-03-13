@@ -27,7 +27,7 @@
 
       <!-- Submit Button -->
       <div class="flex justify-center">
-        <Button type="submit" variant="ghost" class="mt-2">Log In</Button>
+        <Button type="submit" variant="ghost" class="mt-2" :disabled="isLoading">Log In</Button>
       </div>
     </form>
   </div>
@@ -71,11 +71,24 @@ const { handleSubmit, defineField, errors } = useForm({
 const [email] = defineField('email');
 const [password] = defineField('password');
 
-const onSubmit = async (values: LoginFormValues) => {
+interface UserCredentials {
+  email: string;
+  password: string;
+}
 
+const onSubmit = async (values: LoginFormValues) => {
   isLoading.value = true;
   try {
-    await authStore.login(values.email, values.password);
+    const credentials: UserCredentials = {
+      email: values.email,
+      password: values.password,
+    };
+
+    const user = await authStore.login(credentials);
+
+    if (user) {
+      console.log('Login successful');
+    }
   } catch (error) {
     console.error("Login error", error.message);
   } finally {

@@ -1,55 +1,109 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { User } from '@supabase/supabase-js';
-import { supabase } from '../utilities/supabaseClient';
 import { useRouter } from 'vue-router';
+
+interface UserCredentials {
+  email: string;
+  password: string;
+}
+
+interface User extends UserCredentials {
+  firstName: string;
+  lastName: string;
+}
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const router = useRouter();
 
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+  const signUp = async (userData: User): Promise<User | null> => {
+    try {
+      const response = await fetch('http://localhost:5005/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userData.email,
+          password: userData.password,
+          first_name: userData.firstName,
+          last_name: userData.lastName,
+        }),
+      });
 
-    if (error) {
-      console.error('🚨 Supabase Auth Error:', error);
-      throw error;
-    }
-
-    if (data.user) {
-
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert([{ id: data.user.id, email, first_name: firstName, last_name: lastName }]);
-
-      if (insertError) {
-        console.error('🚨 Supabase Insert Error:', insertError);
-        throw insertError;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      user.value = data.user;
+      const data = await response.json();
+
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token);
+
+      router.push('/home');
+      return data.user;
+    } catch (error) {
+      console.error('Error creating user', error);
+      return null;
     }
-    router.push('/home');
-    return data.user;
   };
 
-  const login = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const login = async (credentials: UserCredentials) => {
+    try {
+      const response = await fetch('http://localhost:5005/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
 
-    if (error) throw error;
-    user.value = data.user;
-    router.push('/home');
-    return data.user;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token);
+
+      user.value = data.user;
+      router.push('/home');
+    } catch (error) {
+      console.error('Error logging in', error);
+      return null;
+    }
   };
 
   const logOut = async () => {
-    await supabase.auth.signOut();
-    user.value = null;
+    try {
+      const response = await fetch('http://localhost:5005/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to log out');
+      }
+
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+
+      user.value = null;
+      router.push('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return {
     signUp,
     login,
     logOut,
+    user,
   };
 });

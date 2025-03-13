@@ -60,7 +60,7 @@
 
       <!-- Submit Button -->
       <div class="flex justify-center">
-        <Button type="submit" variant="ghost" class="mt-2">Sign Up</Button>
+        <Button type="submit" variant="ghost" class="mt-2" :disabled="isLoading">Sign Up</Button>
       </div>
     </form>
 
@@ -79,6 +79,7 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { Button } from '@/components/ui/button';
 import { Input } from './ui/input';
@@ -95,8 +96,16 @@ import {
 
 defineEmits(['switch-to-login']);
 
+const router = useRouter();
 const authStore = useAuthStore();
 const isLoading = ref(false);
+
+interface User {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
 
 const signUpSchema = toTypedSchema(
   z.object({
@@ -113,7 +122,6 @@ const signUpSchema = toTypedSchema(
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-
 const { handleSubmit, defineField, errors } = useForm({
   validationSchema: signUpSchema,
 });
@@ -128,9 +136,22 @@ const onSubmit = async (values: SignUpFormValues) => {
 
   isLoading.value = true;
   try {
-    await authStore.signUp(values.email, values.password, values.firstName, values.lastName);
+    const userData: User = {
+      email: values.email,
+      password: values.password,
+      firstName: values.firstName,
+      lastName: values.lastName,
+    };
+
+    const user = await authStore.signUp(userData);
+
+    if (user) {
+      router.push('/home');
+    }
   } catch (error) {
-    console.error("Sign Up error", error.message);
+    console.error("Sign Up error", error);
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    alert(`Signup failed: ${errorMessage}`);
   } finally {
     isLoading.value = false;
   }
