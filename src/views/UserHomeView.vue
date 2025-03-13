@@ -1,20 +1,31 @@
 <template>
   <div class="bg-[#0A0A0A] min-h-screen justify-center items-center flex bg-gradient-to-b from-[#0A0A0A] to-[#0F172A]">
-    <BlurReveal
-      :delay="0.2"
-      :duration="0.75"
-      class="p-8"
-    >
+    <BlurReveal :delay="0.2" :duration="0.75" class="p-8">
       <h2 class=" text-white text-3xl font-bold tracking-tighter xl:text-6xl/none sm:text-5xl">Welcome Back</h2>
       <span class="text-white text-pretty text-xl tracking-tighter xl:text-4xl/none sm:text-3xl">
         Lets get started
       </span>
     </BlurReveal>
+    <div v-if="resumes && resumes.length === 0">
+      <p class="text-white animate-bounce">
+        Looks like you need to upload your first resume. Would you like to do that now?
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, computed } from 'vue';
+import { useResumeStore } from '@/stores/resumeStore';
 import BlurReveal from '@/components/ui/blur-reveal/BlurReveal.vue';
+
+const resumeStore = useResumeStore();
+
+onMounted(async () => {
+  await resumeStore.fetchResumes();
+});
+
+const resumes = computed(() => resumeStore.resumes);
 </script>
 
 <style scoped>

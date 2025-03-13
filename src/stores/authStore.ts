@@ -17,12 +17,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     if (data.user) {
-      console.log("📌 Attempting to insert into 'users' table:", {
-        id: data.user.id,
-        email,
-        first_name: firstName,
-        last_name: lastName,
-      });
 
       const { error: insertError } = await supabase
         .from('users')
