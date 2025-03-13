@@ -2,7 +2,7 @@
 
 import tailwindcssAnimate from 'tailwindcss-animate';
 export default {
-  darkMode: ['class'],
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
