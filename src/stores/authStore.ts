@@ -2,10 +2,11 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../utilities/supabaseClient';
-// import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
+  const router = useRouter();
 
   const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
@@ -34,7 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       user.value = data.user;
     }
-
+    router.push('/home');
     return data.user;
   };
 
@@ -43,6 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (error) throw error;
     user.value = data.user;
+    router.push('/home');
     return data.user;
   };
 
