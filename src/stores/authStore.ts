@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { User } from '@supabase/supabase-js';
 import { useRouter } from 'vue-router';
+import { supabase } from '@/utilities/supabaseClient';
 
 interface UserCredentials {
   email: string;
@@ -16,6 +17,24 @@ interface User extends UserCredentials {
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const router = useRouter();
+
+  const fetchSession = async (): Promise<void> => {
+    const { data, error }: { data: { session: Session | null }; error: AuthError | null } = await supabase.auth.getSession();
+
+    if (error) {
+      console.error('❌ Error fetching session:', error);
+      return;
+    }
+
+    if (data.session) {
+      user.value = data.session.user;
+    } else {
+      console.warn('🚨 No active session found!');
+      user.value = null;
+    }
+  };
+
+  fetchSession();
 
   const signUp = async (userData: User): Promise<User | null> => {
     try {
@@ -41,6 +60,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('refresh_token', data.refresh_token);
 
+      user.value = data.user;
       router.push('/home');
       return data.user;
     } catch (error) {
@@ -69,6 +89,10 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('refresh_token', data.refresh_token);
 
       user.value = data.user;
+      await supabase.auth.setSession({
+        access_token: localStorage.getItem('access_token'),
+        refresh_token: localStorage.getItem('refresh_token'),
+      });
       router.push('/home');
     } catch (error) {
       console.error('Error logging in', error);
@@ -104,6 +128,7 @@ export const useAuthStore = defineStore('auth', () => {
     signUp,
     login,
     logOut,
+    fetchSession,
     user,
   };
 });
