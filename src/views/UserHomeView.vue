@@ -11,10 +11,7 @@
       <p class="text-white animate-pulse text-lg text-center">
         Looks like you need to upload your first resume. Would you like to do that now?
       </p>
-      <FileUpload
-        class="flex flex-col w-[400px] h-[400px] items-center justify-center max-w-lg px-6 py-10 border-2 border-dashed border-neutral-600 rounded-lg bg-neutral-900 shadow-lg hover:border-sky-400 transition-all duration-300">
-        <FileUploadGrid />
-      </FileUpload>
+      <ResumeUpload />
     </div>
   </div>
 </template>
@@ -24,8 +21,8 @@ import { onMounted, computed } from 'vue';
 import { useResumeStore } from '@/stores/resumeStore';
 
 import BlurReveal from '@/components/ui/blur-reveal/BlurReveal.vue';
-import FileUpload from '@/components/ui/file-upload/FileUpload.vue';
-import FileUploadGrid from '@/components/ui/file-upload/FileUploadGrid.vue';
+
+import ResumeUpload from '@/components/ResumeUpload.vue';
 
 const resumeStore = useResumeStore();
 
