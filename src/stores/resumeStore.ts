@@ -89,5 +89,37 @@ export const useResumeStore = defineStore('resume', () => {
     }
   };
 
-  return { fetchResumes, resumes, uploadResume };
+  const deleteResume = async (resumeId: string): Promise<void> => {
+    console.log('clicked');
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session || !session.access_token) {
+        console.error('🚨 No auth session found!');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:5005/api/resumes/${resumeId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      resumes.value = [...resumes.value.filter((resume) => resume.id !== resumeId)];
+
+      console.log(`✅ Resume ${resumeId} deleted successfully`);
+    } catch (error) {
+      console.error('❌ Error deleting resume:', error);
+    }
+  };
+
+  return { fetchResumes, resumes, uploadResume, deleteResume };
 });

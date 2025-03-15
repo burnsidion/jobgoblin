@@ -1,9 +1,6 @@
 <template>
-  <component
-    :is="as"
-    ref="refElement"
-    :class="cn('w-fit transition duration-500 ease-in-out', $props.class)"
-  >
+  <component :is="as" ref="refElement" :class="cn('w-fit transition duration-500 ease-in-out', $props.class)"
+    @click="$emit('click', $event)">
     <slot />
   </component>
 </template>
@@ -23,6 +20,8 @@ const props = defineProps({
   rotateY: { type: [Number, String], default: 0 },
   rotateZ: { type: [Number, String], default: 0 },
 });
+
+defineEmits(['click']);
 
 const refElement = ref<HTMLElement | null>(null);
 
