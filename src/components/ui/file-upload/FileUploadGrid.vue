@@ -8,10 +8,7 @@
     "
   >
     <template v-for="row in ROWS">
-      <template
-        v-for="col in COLUMNS"
-        :key="`${row}-${col}`"
-      >
+      <template v-for="col in COLUMNS" :key="`${row}-${col}`">
         <div
           :class="
             cn(

@@ -11,7 +11,6 @@ interface Resume {
   created_at: string;
 }
 
-
 export const useResumeStore = defineStore('resume', () => {
   const resumes = ref<Resume[]>([]);
 
@@ -62,7 +61,7 @@ export const useResumeStore = defineStore('resume', () => {
       }
 
       const formData = new FormData();
-      formData.append('resume', file); 
+      formData.append('resume', file);
 
       const response = await fetch('http://localhost:5005/api/resumes/upload', {
         method: 'POST',

@@ -30,44 +30,80 @@
 
       <!-- Buttons -->
       <div class="flex gap-3 justify-center py-3">
-        <Button @click="toggleLoginForm" variant="ghost" class="text-lg border border-transparent hover:border-white">
+        <Button
+          @click="toggleLoginForm"
+          variant="ghost"
+          class="text-lg border border-transparent hover:border-white"
+        >
           Log In
         </Button>
-        <Button @click="toggleForm" variant="ghost" class="text-lg border border-transparent hover:border-white">
+        <Button
+          @click="toggleForm"
+          variant="ghost"
+          class="text-lg border border-transparent hover:border-white"
+        >
           Sign Up
         </Button>
       </div>
     </div>
 
     <!-- Modal for Sign-Up Form -->
-    <Transition enter-active-class="transition-transform duration-300 ease-in-out"
-      enter-from-class="translate-x-full opacity-0" enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transition-transform duration-300 ease-in-out" leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0">
-      <div v-if="showForm" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2">
-        <div ref="signupModal"
-          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
-          <button @click="toggleForm" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+    <Transition
+      enter-active-class="transition-transform duration-300 ease-in-out"
+      enter-from-class="translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transition-transform duration-300 ease-in-out"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0"
+    >
+      <div
+        v-if="showForm"
+        class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2"
+      >
+        <div
+          ref="signupModal"
+          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative"
+        >
+          <button @click="toggleForm" class="absolute top-2 right-2 text-white text-xl">
+            &times;
+          </button>
           <SignUpForm @switch-to-login="handleSwitchToLogin" />
         </div>
       </div>
     </Transition>
 
     <!-- Log In Modal -->
-    <Transition enter-active-class="transition-transform duration-300 ease-in-out"
-      enter-from-class="-translate-x-full opacity-0" enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transition-transform duration-300 ease-in-out" leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="-translate-x-full opacity-0">
-      <div v-if="showLoginForm" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2">
-        <div ref="loginModal"
-          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative">
-          <button @click="toggleLoginForm" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+    <Transition
+      enter-active-class="transition-transform duration-300 ease-in-out"
+      enter-from-class="-translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transition-transform duration-300 ease-in-out"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="-translate-x-full opacity-0"
+    >
+      <div
+        v-if="showLoginForm"
+        class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 mx-2"
+      >
+        <div
+          ref="loginModal"
+          class="w-full max-w-md sm:max-w-lg h-auto sm:h-auto sm:max-h-[90vh] bg-gray-900 p-6 rounded-lg shadow-lg flex flex-col relative"
+        >
+          <button @click="toggleLoginForm" class="absolute top-2 right-2 text-white text-xl">
+            &times;
+          </button>
           <LogInForm />
         </div>
       </div>
     </Transition>
-    <ParticlesBg class="absolute inset-0 -z-10" :quantity="100" :ease="100" :color="isDark ? '#FFF' : '#000'"
-      :staticity="10" refresh />
+    <ParticlesBg
+      class="absolute inset-0 -z-10"
+      :quantity="100"
+      :ease="100"
+      :color="isDark ? '#FFF' : '#000'"
+      :staticity="10"
+      refresh
+    />
   </div>
 </template>
 

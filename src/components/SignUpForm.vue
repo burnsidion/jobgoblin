@@ -86,13 +86,7 @@ import { Input } from './ui/input';
 
 import { useAuthStore } from '@/stores/authStore';
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 defineEmits(['switch-to-login']);
 
@@ -108,16 +102,24 @@ interface User {
 }
 
 const signUpSchema = toTypedSchema(
-  z.object({
-    email: z.string().email('Invalid Email Format').min(1, 'Email is required'),
-    password: z.string().min(6, 'Password must contain at least 6 characters'),
-    firstName: z.string().min(1, 'First name is required').max(50, 'First name cannot be longer than 50 characters'),
-    lastName: z.string().min(1, 'Last name is required').max(50, 'Last name cannot be longer than 50 characters'),
-    confirmPassword: z.string(),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords don’t match',
-    path: ['confirmPassword'],
-  })
+  z
+    .object({
+      email: z.string().email('Invalid Email Format').min(1, 'Email is required'),
+      password: z.string().min(6, 'Password must contain at least 6 characters'),
+      firstName: z
+        .string()
+        .min(1, 'First name is required')
+        .max(50, 'First name cannot be longer than 50 characters'),
+      lastName: z
+        .string()
+        .min(1, 'Last name is required')
+        .max(50, 'Last name cannot be longer than 50 characters'),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: 'Passwords don’t match',
+      path: ['confirmPassword'],
+    }),
 );
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
@@ -133,7 +135,6 @@ const [lastName] = defineField('lastName');
 const [confirmPassword] = defineField('confirmPassword');
 
 const onSubmit = async (values: SignUpFormValues) => {
-
   isLoading.value = true;
   try {
     const userData: User = {
@@ -149,8 +150,8 @@ const onSubmit = async (values: SignUpFormValues) => {
       router.push('/home');
     }
   } catch (error) {
-    console.error("Sign Up error", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    console.error('Sign Up error', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     alert(`Signup failed: ${errorMessage}`);
   } finally {
     isLoading.value = false;
