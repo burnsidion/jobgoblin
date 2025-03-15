@@ -13,6 +13,9 @@
       </p>
       <ResumeUpload />
     </div>
+    <div v-else>
+      <UserResumes />
+    </div>
   </div>
 </template>
 
@@ -23,6 +26,8 @@ import { useResumeStore } from '@/stores/resumeStore';
 import BlurReveal from '@/components/ui/blur-reveal/BlurReveal.vue';
 
 import ResumeUpload from '@/components/ResumeUpload.vue';
+
+import UserResumes from '@/components/UserResumes.vue';
 
 const resumeStore = useResumeStore();
 
