@@ -44,13 +44,7 @@ import { Input } from '@/components/ui/input';
 
 import { useAuthStore } from '@/stores/authStore';
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const isLoading = ref(false);
 const authStore = useAuthStore();
@@ -59,7 +53,7 @@ const loginSchema = toTypedSchema(
   z.object({
     email: z.string().email('Invalid email format'),
     password: z.string().min(6, 'Password must contain at least 6 characters'),
-  })
+  }),
 );
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -90,7 +84,7 @@ const onSubmit = async (values: LoginFormValues) => {
       console.log('Login successful');
     }
   } catch (error) {
-    console.error("Login error", error.message);
+    console.error('Login error', error.message);
   } finally {
     isLoading.value = false;
   }
