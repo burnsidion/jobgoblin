@@ -30,12 +30,9 @@
               class="h-[80%] w-full rounded-xl object-cover group-hover/card:shadow-xl py-2" alt="thumbnail" />
           </CardItem>
           <div class="mt-20 flex items-center justify-between">
-            <CardItem :translate-z="20" as="a" href="https://rahulv.dev" target="__blank"
-              class="rounded-xl px-4 py-2 text-xs font-normal dark:text-white">
-              Edit
-            </CardItem>
             <CardItem :translate-z="20" as="button"
-              class="rounded-xl bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
+              class="rounded-xl bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black"
+              @click="handleDelete(resume.id)" style="pointer-events: auto;">
               Delete
             </CardItem>
           </div>
@@ -66,10 +63,22 @@ onMounted(async () => {
 
 const onFileChange = async (e: Event) => {
   const input = e.target as HTMLInputElement;
-  console.log(input);
   if (input.files && input.files.length > 0) {
     selectedFile.value = input.files[0];
     await resumeStore.uploadResume(selectedFile.value);
   }
+};
+
+const handleDelete = async (resumeId: string): Promise<void> => {
+  console.log('hello');
+  if (!resumeId) {
+    console.error("🚨 Resume ID is missing!");
+    return;
+  }
+
+  const confirmDelete = window.confirm("Are you sure you want to delete this resume?");
+  if (!confirmDelete) return;
+
+  await resumeStore.deleteResume(resumeId);
 };
 </script>
