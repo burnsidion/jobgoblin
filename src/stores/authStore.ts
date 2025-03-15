@@ -19,7 +19,8 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
 
   const fetchSession = async (): Promise<void> => {
-    const { data, error }: { data: { session: Session | null }; error: AuthError | null } = await supabase.auth.getSession();
+    const { data, error }: { data: { session: Session | null }; error: AuthError | null } =
+      await supabase.auth.getSession();
 
     if (error) {
       console.error('❌ Error fetching session:', error);
@@ -59,6 +60,12 @@ export const useAuthStore = defineStore('auth', () => {
 
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('refresh_token', data.refresh_token);
+
+      // 🔹 Manually set session to fix the issue
+      await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+      });
 
       user.value = data.user;
       router.push('/home');
