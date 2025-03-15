@@ -1,6 +1,10 @@
 <template>
-  <component :is="as" ref="refElement" :class="cn('w-fit transition duration-500 ease-in-out', $props.class)"
-    @click="$emit('click', $event)">
+  <component
+    :is="as"
+    ref="refElement"
+    :class="cn('w-fit transition duration-500 ease-in-out', $props.class)"
+    @click="$emit('click', $event)"
+  >
     <slot />
   </component>
 </template>

@@ -1,10 +1,19 @@
 <template>
-  <div :class="['flex items-center justify-center p-2', containerClass]" style="perspective: 1000px">
-    <div ref="containerRef" :class="[
-      'relative flex items-center justify-center transition-all duration-200 ease-linear',
-      $props.class,
-    ]" style="transform-style: preserve-3d;" @mouseenter="handleMouseEnter"
-      @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
+  <div
+    :class="['flex items-center justify-center p-2', containerClass]"
+    style="perspective: 1000px"
+  >
+    <div
+      ref="containerRef"
+      :class="[
+        'relative flex items-center justify-center transition-all duration-200 ease-linear',
+        $props.class,
+      ]"
+      style="transform-style: preserve-3d"
+      @mouseenter="handleMouseEnter"
+      @mousemove="handleMouseMove"
+      @mouseleave="handleMouseLeave"
+    >
       <slot />
     </div>
   </div>
