@@ -15,10 +15,10 @@
     <!-- Desktop Navigation -->
     <ul class="hidden space-x-6 text-white md:flex">
       <router-link
-        to="/about"
+        to="/application"
         class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full"
       >
-        About
+        New Application
       </router-link>
       <router-link
         to="/projects"
@@ -52,11 +52,11 @@
           About
         </router-link>
         <router-link
-          to="/projects"
+          to="/application"
           @click="closeMenu"
           class="transition duration-300 hover:text-gray-400"
         >
-          Projects
+          New Application
         </router-link>
         <router-link to="/" @click="closeMenu" class="transition duration-300 hover:text-gray-400">
           Home
