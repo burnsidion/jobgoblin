@@ -3,7 +3,7 @@
     <div class="relative z-10 flex flex-col items-center text-center max-w-lg p-8">
       <BoxReveal color="linear-gradient(to right, #F8FAFC, #E5E7EB)">
         <p class="text-[3.5rem] font-semibold">
-          Welcome To JobGoblin<span class="text-white">.</span>
+          Welcome To ResumeAI<span class="text-white">.</span>
         </p>
       </BoxReveal>
 

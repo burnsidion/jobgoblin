@@ -38,9 +38,25 @@ export const useApplicationStore = defineStore('applicationStore', () => {
   const createApplication = (values: Application) => {
     applications.value.push(values);
   };
-  // async function fetchSomething() {
-  //   // API call logic
-  // }
+  async function submitApplication(values: Application) {
+    try {
+      const response = await fetch('/applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create application');
+      }
+      const data = await response.json();
+      createApplication(data.data);
+    } catch (error) {
+      console.error('Error submitting application:', error);
+    }
+  }
 
-  return { application, fetchUserResumes, userResumes, createApplication };
+  return { application, fetchUserResumes, userResumes, createApplication, submitApplication };
 });
