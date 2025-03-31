@@ -38,10 +38,10 @@ import UserResumes from '@/components/UserResumes.vue';
 const resumeStore = useResumeStore();
 const resumes = computed(() => resumeStore.resumes);
 
-const isLoading = ref(true); // ✅ Start as true
+const isLoading = ref(true);
 
 onMounted(async () => {
   await resumeStore.fetchResumes();
-  isLoading.value = false; // ✅ Set to false after fetching
+  isLoading.value = false;
 });
 </script>

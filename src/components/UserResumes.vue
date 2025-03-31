@@ -19,7 +19,7 @@
     </div>
 
     <!-- Disable Input When Max Resumes Reached -->
-    <p v-else class="text-center text-gray-400">Max Resumes Reached (3)</p>
+    <p v-else class="text-center text-gray-400">Max Base-Resumes Reached (3)</p>
 
     <div class="flex flex-col gap-4">
       <CardContainer v-for="resume in userResumes" :key="resume.id">

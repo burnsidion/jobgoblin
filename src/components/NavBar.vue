@@ -1,36 +1,22 @@
 <template>
   <nav
-    class="fixed left-0 top-0 z-50 flex w-full items-center justify-between bg-transparent p-4 backdrop-blur-md md:p-10 md:backdrop-blur-none lg:p-14"
-  >
+    class="fixed left-0 top-0 z-50 flex w-full items-center justify-between bg-transparent p-4 backdrop-blur-md md:p-10 md:backdrop-blur-none lg:p-14">
     <div class="text-2xl font-bold text-white">
-      <router-link
-        to="/"
-        @click="handleClick"
-        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full"
-      >
+      <router-link to="/home" @click="handleClick"
+        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full">
         Home
       </router-link>
     </div>
 
     <!-- Desktop Navigation -->
     <ul class="hidden space-x-6 text-white md:flex">
-      <router-link
-        to="/application"
-        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full"
-      >
+      <router-link to="/application"
+        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full">
         New Application
       </router-link>
-      <router-link
-        to="/projects"
-        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full"
-      >
-        Projects
-      </router-link>
-      <router-link
-        to="/contact"
-        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full"
-      >
-        Contact
+      <router-link to="/projects"
+        class="relative text-lg font-medium transition duration-300 after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:origin-center after:bg-white after:transition-all after:duration-300 hover:text-gray-400 hover:after:left-0 hover:after:w-full">
+        Track Applications
       </router-link>
     </ul>
 
@@ -39,30 +25,17 @@
 
     <!-- Mobile Menu Modal -->
     <transition name="slide-fade">
-      <div
-        v-if="isMenuOpen"
-        class="fixed inset-0 flex min-h-screen w-full flex-col items-center justify-center space-y-6 bg-black bg-opacity-90 text-2xl text-white"
-      >
+      <div v-if="isMenuOpen"
+        class="fixed inset-0 flex min-h-screen w-full flex-col items-center justify-center space-y-6 bg-black bg-opacity-90 text-2xl text-white">
         <button @click="closeMenu" class="absolute right-5 top-5 text-3xl">✕</button>
-        <router-link
-          to="/about"
-          @click="closeMenu"
-          class="transition duration-300 hover:text-gray-400"
-        >
-          About
-        </router-link>
-        <router-link
-          to="/application"
-          @click="closeMenu"
-          class="transition duration-300 hover:text-gray-400"
-        >
-          New Application
-        </router-link>
-        <router-link to="/" @click="closeMenu" class="transition duration-300 hover:text-gray-400">
+        <router-link to="/home" @click="closeMenu" class="transition duration-300 hover:text-gray-400">
           Home
         </router-link>
+        <router-link to="/application" @click="closeMenu" class="transition duration-300 hover:text-gray-400">
+          New Application
+        </router-link>
         <router-link to="/contact" class="transition duration-300 hover:text-gray-400">
-          Contact
+          Track Applications
         </router-link>
       </div>
     </transition>
@@ -96,12 +69,12 @@ const handleClick = async (): Promise<void> => {
     isSpinning.value = false;
   }
 
-  if (route.path === '/') {
+  if (route.path === '/home') {
     router.replace({ path: '/refresh' }).then(() => {
-      router.replace('/');
+      router.replace('/home');
     });
   } else {
-    router.push('/');
+    router.push('/home');
   }
 };
 </script>

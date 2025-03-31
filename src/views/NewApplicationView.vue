@@ -57,7 +57,12 @@
         <!-- Submit Button -->
         <div class="flex justify-center">
           <Button type="submit" variant="ghost" class="text-lg border border-transparent hover:border-white mt-3">
-            Submit Application
+            Track Application
+          </Button>
+          <Button type="button" variant="ghost" class="text-lg border border-transparent hover:border-white mt-3">
+            <router-link to="/home" class="transition duration-300 hover:text-gray-400">
+              Cancel
+            </router-link>
           </Button>
         </div>
       </form>
@@ -108,31 +113,14 @@ const [role] = defineField("role");
 const [description] = defineField("description");
 const [resume] = defineField("resume");
 
-// const submitForm = handleSubmit(async (values) => {
-//   // const formData = new FormData();
-//   // formData.append("company", values.company);
-//   // formData.append("role", values.role);
-//   // formData.append("description", values.description);
-//   // formData.append("resume", selectedResume.value || '');
-
-//   // const response = await fetch("/api/applications", {
-//   //   method: "POST",
-//   //   body: formData,
-//   // });
-//   applicationStore.createApplication(values);
-//   console.log("Submitted:", values);
-// });
-
 const submitForm = handleSubmit(async (values) => {
-  applicationStore.createApplication({
-    ...values,
-    resume: resume.value || '',
-  });
+  const formData = new FormData();
+  formData.append("company", values.company);
+  formData.append("role", values.role);
+  formData.append("description", values.description);
+  formData.append("resume", selectedResume.value || '');
 
-  console.log('Application Created:', {
-    ...values,
-    resume: resume.value || '',
-  });
+  await applicationStore.submitApplication(formData);
 });
 </script>
 
