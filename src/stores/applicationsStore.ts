@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 import { useResumeStore } from './resumeStore';
+import { useAuthStore } from './authStore';
 
 interface Application {
   id?: string;
@@ -16,6 +17,7 @@ interface Application {
 }
 export const useApplicationStore = defineStore('applicationStore', () => {
   const resumeStore = useResumeStore();
+  const authStore = useAuthStore();
 
   const userResumes = computed(() => resumeStore.resumes);
 
@@ -40,17 +42,22 @@ export const useApplicationStore = defineStore('applicationStore', () => {
   };
   async function submitApplication(values: Application) {
     try {
-      const response = await fetch('/applications', {
+      const token = localStorage.getItem('access_token') || authStore?.user?.access_token;
+
+      const response = await fetch('http://localhost:5005/api/applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(values),
       });
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to create application');
       }
+
       const data = await response.json();
       createApplication(data.data);
     } catch (error) {

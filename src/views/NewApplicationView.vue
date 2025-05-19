@@ -57,7 +57,7 @@
         <!-- Submit Button -->
         <div class="flex justify-center">
           <Button type="submit" variant="ghost" class="text-lg border border-transparent hover:border-white mt-3">
-            Track Application
+            Tailor Resume
           </Button>
           <Button type="button" variant="ghost" class="text-lg border border-transparent hover:border-white mt-3">
             <router-link to="/home" class="transition duration-300 hover:text-gray-400">
@@ -76,7 +76,7 @@
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
-import { ref, onMounted, computed } from 'vue';
+import { onMounted, computed } from 'vue';
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -114,13 +114,13 @@ const [description] = defineField("description");
 const [resume] = defineField("resume");
 
 const submitForm = handleSubmit(async (values) => {
-  const formData = new FormData();
-  formData.append("company", values.company);
-  formData.append("role", values.role);
-  formData.append("description", values.description);
-  formData.append("resume", selectedResume.value || '');
-
-  await applicationStore.submitApplication(formData);
+  const applicationData = {
+    company_name: values.company,
+    job_title: values.role,
+    job_description: values.description,
+    resume_used: values.resume,
+  };
+  await applicationStore.submitApplication(applicationData);
 });
 </script>
 
