@@ -42,13 +42,12 @@ export const useApplicationStore = defineStore('applicationStore', () => {
   };
   async function submitApplication(values: Application) {
     try {
-      const token = localStorage.getItem('access_token') || authStore?.user?.access_token;
-
+      const accessToken = localStorage.getItem('access_token');
       const response = await fetch('http://localhost:5005/api/applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(values),
       });

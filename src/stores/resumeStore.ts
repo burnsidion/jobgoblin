@@ -121,5 +121,43 @@ export const useResumeStore = defineStore('resume', () => {
     }
   };
 
-  return { fetchResumes, resumes, uploadResume, deleteResume };
+  const tailorResume = async (
+    jobDescription: string,
+    baseResumeUrl: string,
+  ): Promise<string | null> => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session || !session.access_token) {
+        console.error('🚨 No auth session found!');
+        return null;
+      }
+
+      const response = await fetch('http://localhost:5005/api/tailor/tailor-resume', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          job_description: jobDescription,
+          base_resume_url: baseResumeUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.tailored_resume_url;
+    } catch (error) {
+      console.error('Error tailoring resume:', error);
+      return null;
+    }
+  };
+
+  return { fetchResumes, resumes, uploadResume, deleteResume, tailorResume };
 });
