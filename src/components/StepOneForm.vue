@@ -113,11 +113,15 @@ const [description] = defineField("description");
 const [resume] = defineField("resume");
 
 const submitForm = handleSubmit(async (values) => {
+  console.log('Submitting form with values:', values);
   const applicationData = {
     company_name: values.company,
     job_title: values.role,
     job_description: values.description,
     resume_used: values.resume,
+    job_link: '',
+    date_applied: new Date().toISOString(),
+    status: 'open',
   };
   emit('next', applicationData);
 });
